@@ -1,0 +1,21 @@
+{
+  "name": "revenuewire/redis-session",
+  "type": "library",
+  "description": "Redis PHP SESSION Handler",
+  "homepage": "https://github.com/revenuewire/redis-session",
+  "license": "Apache License 2.0",
+  "authors": [
+    {
+      "name": "Scott Wang",
+      "email": "swang@revenuewire.com"
+    }
+  ],
+  "require": {
+    "predis/predis": "^1.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "RW\\": "src/"
+    }
+  }
+}
