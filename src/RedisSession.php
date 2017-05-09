@@ -19,7 +19,7 @@ class RedisSession implements \SessionHandlerInterface
      * @param string $prefix
      * @param null $ttl
      */
-    public function __construct(Client $redis, $prefix = 'session:', $ttl = null)
+    public function __construct(Client $redis, $prefix = 'session', $ttl = null)
     {
         $this->redis = $redis;
         $this->prefix = $prefix;
@@ -32,7 +32,7 @@ class RedisSession implements \SessionHandlerInterface
      * @param string $savePath
      * @param string $name
      *
-     * @return bool|void
+     * @return bool
      */
     public function open($savePath, $name)
     {
@@ -45,7 +45,7 @@ class RedisSession implements \SessionHandlerInterface
      *
      * @param int $maxLifetime
      *
-     * @return bool|void
+     * @return bool
      */
     public function gc($maxLifetime)
     {
@@ -67,11 +67,11 @@ class RedisSession implements \SessionHandlerInterface
      *
      * @param  string $sessionId The session id.
      *
-     * @return bool|void
+     * @return bool
      */
     public function destroy($sessionId)
     {
-        $this->redis->del($this->prefix.$sessionId);
+        $this->redis->del(array($this->prefix . ':' . $sessionId));
         return true;
     }
 
@@ -83,7 +83,7 @@ class RedisSession implements \SessionHandlerInterface
      */
     public function read($sessionId)
     {
-        $sessionId = $this->prefix.$sessionId;
+        $sessionId = $this->prefix . ':' . $sessionId;
         $sessionData = $this->redis->get($sessionId);
 
         // Refresh the Expire
@@ -98,11 +98,11 @@ class RedisSession implements \SessionHandlerInterface
      * @param string $sessionId
      * @param string $sessionData
      *
-     * @return bool|void
+     * @return bool
      */
     public function write($sessionId, $sessionData)
     {
-        $sessionId = $this->prefix.$sessionId;
+        $sessionId = $this->prefix . ':' . $sessionId;
 
         // Write the session data to Redis.
         $this->redis->set($sessionId, $sessionData);
