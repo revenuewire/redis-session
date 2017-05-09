@@ -19,7 +19,7 @@ class RedisSession implements \SessionHandlerInterface
      * @param string $prefix
      * @param null $ttl
      */
-    public function __construct(Client $redis, $prefix = 's:', $ttl = null)
+    public function __construct(Client $redis, $prefix = 'session:', $ttl = null)
     {
         $this->redis = $redis;
         $this->prefix = $prefix;
@@ -37,6 +37,7 @@ class RedisSession implements \SessionHandlerInterface
     public function open($savePath, $name)
     {
         //no need
+        return true;
     }
 
     /**
@@ -49,6 +50,7 @@ class RedisSession implements \SessionHandlerInterface
     public function gc($maxLifetime)
     {
         //no need
+        return true;
     }
 
     /**
@@ -57,6 +59,7 @@ class RedisSession implements \SessionHandlerInterface
     public function close()
     {
         unset($this->redis);
+        return true;
     }
 
     /**
@@ -69,6 +72,7 @@ class RedisSession implements \SessionHandlerInterface
     public function destroy($sessionId)
     {
         $this->redis->del($this->prefix.$sessionId);
+        return true;
     }
 
     /**
@@ -105,5 +109,6 @@ class RedisSession implements \SessionHandlerInterface
 
         // Set the expire so we don't have to rely on PHP's gc.
         $this->redis->expire($sessionId, $this->maxLifetime);
+        return true;
     }
 }
